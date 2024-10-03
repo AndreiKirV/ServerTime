@@ -2,7 +2,6 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-//если правильно именовать ClockDisplayMB с той внутрянкой, то как здесь
 public class DialController : MonoBehaviour
 {
     [SerializeField] private ArrowMB _hourRect;
@@ -10,13 +9,6 @@ public class DialController : MonoBehaviour
     [SerializeField] private ArrowMB _secondRect;
 
     private TimeController _timeController;
-
-    private void Awake()
-    {
-        _hourRect.Init(this);
-        _minuteRect.Init(this);
-        _secondRect.Init(this);
-    }
 
     //с использованием углов Эйлера могут быть проблемы при повороте по всем осям, но т.к. поварачиваем одну - почему нет
     public void SetTime(DateTimeOffset time)
@@ -37,11 +29,26 @@ public class DialController : MonoBehaviour
 
     public void SetTime()
     {
-        _timeController.SetTime(_hourRect.GetValue(), _minuteRect.GetValue(), _secondRect.GetValue());
+        if (_timeController.IsEditable)
+            _timeController.SetTime(_hourRect.GetValue(), _minuteRect.GetValue(), _secondRect.GetValue());
+    }
+
+    public void ChangeInteractivity(bool target)
+    {
+        _hourRect.Image.raycastTarget = target;
+        _minuteRect.Image.raycastTarget = target;
+        _secondRect.Image.raycastTarget = target;
     }
 
     public void Init(TimeController timeController)
     {
         _timeController = timeController;
+    }
+
+    private void Awake()
+    {
+        _hourRect.Init(this);
+        _minuteRect.Init(this);
+        _secondRect.Init(this);
     }
 }

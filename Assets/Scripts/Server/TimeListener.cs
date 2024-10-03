@@ -7,7 +7,6 @@ public class TimeListener : MonoBehaviour
 {
     [SerializeField] private string TimeApiUrl = "https://yandex.com/time/sync.json";
     [SerializeField] private TimeController _timeController;
-    [SerializeField] private Vector3 _time;
     [SerializeField] private float _timeUpdateFrequency;
     private Coroutine timeCoroutine;
 
@@ -44,9 +43,6 @@ public class TimeListener : MonoBehaviour
                 string jsonResponse = request.downloadHandler.text;
                 Data timeData = JsonUtility.FromJson<Data>(jsonResponse);
                 DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeMilliseconds(timeData.time);
-
-                if (_time != Vector3.zero)
-                    dateTime = new DateTimeOffset(2024, 10, 02, (int)_time.x, (int)_time.y, (int)_time.z, TimeSpan.Zero);
 
                 _timeController.SetTime(dateTime);
             }

@@ -1,13 +1,14 @@
 using DG.Tweening;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+//создаю МБ по привычке, понравилось схема работы с ECS подобная, по хорошему в таких МБ все поля публичные, gо идее здесь не должно быть логики
 public class ArrowMB : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public RectTransform Rect;
-    public ArrowType arrowType;
+    public ArrowType ArrowType;
+    public Image Image;
 
     public bool IsPoint => _isPoint;
 
@@ -32,11 +33,8 @@ public class ArrowMB : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     public void OnEndDrag(PointerEventData eventData)
     {
         _isPoint = false;
-        //float angleZ = 360f - Rect.localEulerAngles.z;
-        //(int)(angleZ % 360f / (360f / 60f));
 
         _dialController.SetTime();
-
     }
 
     public void Init(DialController dialController)
@@ -48,7 +46,7 @@ public class ArrowMB : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     {
         float angleZ = 360f - Rect.localEulerAngles.z;
 
-        if (arrowType == ArrowType.Hour)
+        if (ArrowType == ArrowType.Hour)
             return (int)(angleZ % 360f / (360f / 12f));
 
         float result = angleZ % 360f / (360f / 60f);
@@ -57,6 +55,7 @@ public class ArrowMB : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     }
 }
 
+//лучше вывести в какой ниудь словарик или типа того, но т.к. проектик не большой, решил не морочиться
 public enum ArrowType
 {
     Hour,
